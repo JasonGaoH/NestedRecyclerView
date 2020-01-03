@@ -2,6 +2,7 @@ package com.gaohui.nestedrecyclerview.ui
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.gaohui.nestedrecyclerview.R
 import com.gaohui.nestedrecyclerview.adapter.MultiTypeAdapter
 import com.gaohui.nestedrecyclerview.bean.CategoryBean
@@ -14,6 +15,9 @@ class MainActivity : AppCompatActivity() {
     private val mDataList = ArrayList<Any>()
 
     private val strArray = arrayOf("关注", "推荐", "视频", "直播", "图片", "段子", "精华", "热门")
+//    private val strArray = arrayOf("关注")
+
+    var lastBackPressedTime = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,5 +39,15 @@ class MainActivity : AppCompatActivity() {
         mDataList.add(categoryBean)
         parentRecyclerView.adapter = multiTypeAdapter
         multiTypeAdapter.notifyDataSetChanged()
+    }
+
+    override fun onBackPressed() {
+        if (System.currentTimeMillis() - lastBackPressedTime < 2000) {
+            super.onBackPressed()
+        } else {
+            parentRecyclerView.scrollToPosition(0)
+            Toast.makeText(this,"再按一次退出程序",Toast.LENGTH_SHORT).show()
+            lastBackPressedTime = System.currentTimeMillis()
+        }
     }
 }

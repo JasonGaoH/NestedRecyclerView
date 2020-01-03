@@ -1,6 +1,5 @@
 package com.gaohui.nestedrecyclerview
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -174,6 +173,15 @@ class ParentRecyclerView @JvmOverloads constructor(context: Context, attrs: Attr
             return getCurrentChildRecyclerView()
         }
         return null
+    }
+
+
+    override fun scrollToPosition(position: Int) {
+        //处理一键置顶会出现卡顿的问题
+        findNestedScrollingChildRecyclerView()?.scrollToPosition(position)
+        postDelayed({
+            super.scrollToPosition(position)
+        },50)
     }
 
 }
