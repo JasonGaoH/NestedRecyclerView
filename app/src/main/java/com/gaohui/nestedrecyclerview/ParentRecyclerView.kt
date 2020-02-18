@@ -10,8 +10,10 @@ import com.gaohui.nestedrecyclerview.adapter.MultiTypeAdapter
 import com.gaohui.nestedrecyclerview.helper.FlingHelper
 import com.gaohui.nestedrecyclerview.utils.UIUtils
 
+
+
 class ParentRecyclerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
-    RecyclerView(context, attrs, defStyleAttr)  {
+    RecyclerView(context, attrs, defStyleAttr) {
 
     private var mMaxDistance:Int = 0
 
@@ -183,5 +185,54 @@ class ParentRecyclerView @JvmOverloads constructor(context: Context, attrs: Attr
             super.scrollToPosition(position)
         },50)
     }
+
+    //----------------------------------------------------------------------------------------------
+    // NestedScroll. fix：当ChildRecyclerView下滑时(手指未放开)，ChildRecyclerView滑动到顶部（非fling），此时ParentRecyclerView不会继续下滑。
+    //----------------------------------------------------------------------------------------------
+
+    override fun onStartNestedScroll(child: View?, target: View?, nestedScrollAxes: Int): Boolean {
+        return (target != null) && target is ChildRecyclerView
+    }
+
+    override fun onNestedPreScroll(target: View?, dx: Int, dy: Int, consumed: IntArray) {
+        val childRecyclerView = findNestedScrollingChildRecyclerView()
+        //1.当前Parent RecyclerView没有滑动底，且dy> 0 是下滑
+        val isParentCanScroll = dy > 0 && isScrollEnd().not()
+        //2.当前Child RecyclerView滑到顶部了，且dy < 0,即上滑
+        val isChildCanNotScroll = !(dy >= 0 || childRecyclerView == null || childRecyclerView.isScrollTop().not())
+        //以上两种情况都需要让Parent RecyclerView去scroll，和下面onNestedPreFling机制类似
+        if(isParentCanScroll || isChildCanNotScroll) {
+            scrollBy(0,dy)
+            consumed[1] = dy
+        }
+    }
+
+    override fun onNestedFling(target: View?, velocityX: Float, velocityY: Float, consumed: Boolean): Boolean {
+        return true
+    }
+
+    override fun onNestedPreFling(target: View?, velocityX: Float, velocityY: Float): Boolean {
+        val childRecyclerView = findNestedScrollingChildRecyclerView()
+        val isParentCanFling = velocityY > 0f && isScrollEnd().not()
+        val isChildCanNotFling = !(velocityY >= 0 || childRecyclerView == null || childRecyclerView.isScrollTop().not())
+        if(isParentCanFling.not() && isChildCanNotFling.not()) {
+            return false
+        }
+        fling(0,velocityY.toInt())
+        return true
+    }
+
+//    override fun dispatchNestedPreFling(velocityX: Float, velocityY: Float): Boolean {
+//        val childRecyclerView = findNestedScrollingChildRecyclerView()
+//        if(isScrollEnd().not() || childRecyclerView == null || childRecyclerView.isScrollTop()) {
+//            return super.dispatchNestedPreFling(velocityX, velocityY)
+//        }
+//        childFling(velocityY.toInt())
+//        return true
+//    }
+
+    //----------------------------------------------------------------------------------------------
+    // NestedScroll. fix：当ChildRecyclerView下滑时(手指未放开)，ChildRecyclerView滑动到顶部（非fling），此时ParentRecyclerView不会继续下滑。
+    //----------------------------------------------------------------------------------------------
 
 }
