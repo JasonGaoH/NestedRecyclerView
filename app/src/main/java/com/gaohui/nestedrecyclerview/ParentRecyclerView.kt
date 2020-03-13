@@ -9,7 +9,7 @@ import android.view.View
 import com.gaohui.nestedrecyclerview.adapter.MultiTypeAdapter
 import com.gaohui.nestedrecyclerview.helper.FlingHelper
 import com.gaohui.nestedrecyclerview.utils.UIUtils
-
+import java.util.concurrent.atomic.AtomicBoolean
 
 
 class ParentRecyclerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
@@ -33,9 +33,12 @@ class ParentRecyclerView @JvmOverloads constructor(context: Context, attrs: Attr
      */
     private var velocityY: Int = 0
 
+    var canScrollVertically: AtomicBoolean
+
     init {
         mMaxDistance = mFlingHelper.getVelocityByDistance((UIUtils.getScreenHeight() * 4).toDouble())
 
+        canScrollVertically = AtomicBoolean(true)
         addOnScrollListener(object :OnScrollListener(){
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
@@ -51,7 +54,7 @@ class ParentRecyclerView @JvmOverloads constructor(context: Context, attrs: Attr
                     totalDy = 0
                     isStartFling = false
                 }
-                //在RecyclerView fling情况下，记录当前RecyclerView在y轴的便宜
+                //在RecyclerView fling情况下，记录当前RecyclerView在y轴的偏移
                 totalDy += dy
             }
         })
@@ -93,7 +96,12 @@ class ParentRecyclerView @JvmOverloads constructor(context: Context, attrs: Attr
 
             override fun canScrollVertically(): Boolean {
                 val childRecyclerView = findNestedScrollingChildRecyclerView()
-                return childRecyclerView == null || childRecyclerView.isScrollTop()
+
+                if(canScrollVertically.get() || childRecyclerView == null || childRecyclerView.isScrollTop()) {
+                    return true
+                }
+                return false
+
             }
 
             override fun addDisappearingView(child: View?) {
@@ -122,6 +130,7 @@ class ParentRecyclerView @JvmOverloads constructor(context: Context, attrs: Attr
         if((ev == null || ev.action == MotionEvent.ACTION_MOVE).not()) {
             //在ACTION_MOVE的情况下，将lastY置为0
             lastY = 0f
+            canScrollVertically.set(isScrollEnd().not())
         }
         return try {
             super.dispatchTouchEvent(ev)
@@ -137,13 +146,17 @@ class ParentRecyclerView @JvmOverloads constructor(context: Context, attrs: Attr
         }
         if(isScrollEnd()) {
             //如果父RecyclerView已经滑动到底部，需要让子RecyclerView滑动剩余的距离
+
             val childRecyclerView = findNestedScrollingChildRecyclerView()
             childRecyclerView?.run {
                 val deltaY = (lastY - e.y).toInt()
-                if(deltaY != 0) {
-                    scrollBy(0,deltaY)
-                }
+
+                canScrollVertically.set(false)
+                scrollBy(0,deltaY)
             }
+        }
+        if(e.action == MotionEvent.ACTION_UP) {
+            canScrollVertically.set(true)
         }
         lastY = e.y
         return try {
@@ -230,6 +243,7 @@ class ParentRecyclerView @JvmOverloads constructor(context: Context, attrs: Attr
 //        childFling(velocityY.toInt())
 //        return true
 //    }
+
 
     //----------------------------------------------------------------------------------------------
     // NestedScroll. fix：当ChildRecyclerView下滑时(手指未放开)，ChildRecyclerView滑动到顶部（非fling），此时ParentRecyclerView不会继续下滑。
