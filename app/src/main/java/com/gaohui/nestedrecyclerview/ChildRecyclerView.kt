@@ -54,7 +54,7 @@ open class ChildRecyclerView @JvmOverloads constructor(context: Context, attrs: 
             if(isScrollTop() && mVelocityY != 0) {
                 //当前ChildRecyclerView已经滑动到顶部，且竖直方向加速度不为0,如果有多余的需要交由父RecyclerView继续fling
                 val flingDistance = mFlingHelper.getSplineFlingDistance(mVelocityY)
-                if(flingDistance > (Math.abs(totalDy))) {
+                if(flingDistance > (Math.abs(this@ChildRecyclerView.totalDy))) {
                     fling(0,-mFlingHelper.getVelocityByDistance(flingDistance + totalDy))
                 }
                 totalDy = 0
