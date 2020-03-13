@@ -57,7 +57,8 @@ open class ChildRecyclerView @JvmOverloads constructor(context: Context, attrs: 
                 if(flingDistance > (Math.abs(this@ChildRecyclerView.totalDy))) {
                     fling(0,-mFlingHelper.getVelocityByDistance(flingDistance + totalDy))
                 }
-                totalDy = 0
+                //fix 在run方法里面，注意 this@ChildRecyclerView的使用，否则使用的是ParentRecyclerView的变量
+                this@ChildRecyclerView.totalDy = 0
                 mVelocityY = 0
             }
         }
