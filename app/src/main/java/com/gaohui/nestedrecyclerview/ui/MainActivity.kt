@@ -1,5 +1,6 @@
 package com.gaohui.nestedrecyclerview.ui
 
+import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -14,22 +15,29 @@ class MainActivity : AppCompatActivity() {
 
     private val mDataList = ArrayList<Any>()
 
-    private val strArray = arrayOf("关注", "推荐", "视频", "直播", "图片", "段子", "精华", "热门")
-//    private val strArray = arrayOf("关注")
+    private val strArray = arrayOf("推荐", "视频", "直播", "图片", "精华", "热门")
 
     var lastBackPressedTime = 0L
+
+    private val multiTypeAdapter = MultiTypeAdapter(mDataList)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         parentRecyclerView.initLayoutManager()
+        parentRecyclerView.adapter = multiTypeAdapter
 
-        initData()
+        refresh()
+
+        swipeRefreshLayout.setColorSchemeColors(Color.RED)
+        swipeRefreshLayout.setOnRefreshListener {
+            refresh()
+        }
     }
 
-    private fun initData() {
-        val multiTypeAdapter = MultiTypeAdapter(mDataList)
+    private fun refresh() {
+        mDataList.clear()
         for (i in 0..8) {
             mDataList.add("parent item text $i")
         }
@@ -37,8 +45,8 @@ class MainActivity : AppCompatActivity() {
         categoryBean.tabTitleList.clear()
         categoryBean.tabTitleList.addAll(strArray.asList())
         mDataList.add(categoryBean)
-        parentRecyclerView.adapter = multiTypeAdapter
         multiTypeAdapter.notifyDataSetChanged()
+        swipeRefreshLayout.isRefreshing = false
     }
 
     override fun onBackPressed() {
@@ -49,5 +57,10 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this,"再按一次退出程序",Toast.LENGTH_SHORT).show()
             lastBackPressedTime = System.currentTimeMillis()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        multiTypeAdapter.destroy()
     }
 }

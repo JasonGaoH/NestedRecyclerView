@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.gaohui.nestedrecyclerview.ChildRecyclerView
 import com.gaohui.nestedrecyclerview.R
+import com.gaohui.nestedrecyclerview.bean.CategoryBean
 import com.gaohui.nestedrecyclerview.holder.SimpleCategoryViewHolder
 import com.gaohui.nestedrecyclerview.holder.SimpleTextViewHolder
 
@@ -41,7 +42,7 @@ class MultiTypeAdapter(private val dataSet:ArrayList<Any>) : RecyclerView.Adapte
         if(holder is SimpleTextViewHolder) {
             holder.mTv.text = dataSet[pos] as String
         } else if(holder is SimpleCategoryViewHolder){
-            holder.bindData(dataSet[pos])
+            holder.bindData(dataSet[pos] as CategoryBean)
         }
     }
 
@@ -50,6 +51,11 @@ class MultiTypeAdapter(private val dataSet:ArrayList<Any>) : RecyclerView.Adapte
            return this.getCurrentChildRecyclerView()
         }
         return null
+    }
+
+    fun destroy() {
+        mCategoryViewHolder?.destroy()
+
     }
 
 

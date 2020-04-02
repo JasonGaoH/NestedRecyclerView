@@ -3,6 +3,7 @@ package com.gaohui.nestedrecyclerview.holder
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.RecyclerView
+import android.util.ArrayMap
 import android.util.Log
 import android.view.View
 import com.gaohui.nestedrecyclerview.CategoryView
@@ -16,7 +17,9 @@ class SimpleCategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
     private val mTabLayout: TabLayout = itemView.findViewById(R.id.tabs) as TabLayout
     private val mViewPager: ViewPager = itemView.findViewById(R.id.viewPager) as ViewPager
 
-    val viewList = ArrayList<ChildRecyclerView>()
+    val viewList = ArrayList<CategoryView>()
+
+    var cacheVies = HashMap<String,CategoryView>()
 
     private var mCurrentRecyclerView :ChildRecyclerView? = null
 
@@ -29,7 +32,6 @@ class SimpleCategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
             override fun onPageSelected(position: Int) {
                 if(viewList.isEmpty().not()) {
                     mCurrentRecyclerView = viewList[position]
-                    Log.d("gaohui","onPageSelected: $position $mCurrentRecyclerView")
                 }
             }
             override fun onPageScrollStateChanged(state: Int) {
@@ -39,17 +41,22 @@ class SimpleCategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
         })
     }
 
-    fun bindData(obj: Any) {
-        //TODO 需要优化，这里每次item被回收时都会重新setupWithViewPager
-        (obj as? CategoryBean)?.apply {
+    fun bindData(categoryBean: CategoryBean) {
+        categoryBean.apply {
             viewList.clear()
-            tabTitleList.forEach{ _ ->
-                val categoryView = CategoryView(itemView.context)
+            if(cacheVies.size > tabTitleList.size) {
+                cacheVies.clear()
+            }
+            tabTitleList.forEach{
+                var categoryView = cacheVies[it]
+                if(categoryView == null || categoryView.parent != mViewPager) {
+                    categoryView = CategoryView(itemView.context)
+                    cacheVies[it] = categoryView
+                }
                 viewList.add(categoryView)
             }
             mCurrentRecyclerView = viewList[mViewPager.currentItem]
             val lastItem = mViewPager.currentItem
-            Log.d("gaohui","bindData: ${mViewPager.currentItem} $mCurrentRecyclerView")
 
             mViewPager.adapter = CategoryPagerAdapter(viewList,tabTitleList)
             mTabLayout.setupWithViewPager(mViewPager)
@@ -59,5 +66,9 @@ class SimpleCategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
 
     fun getCurrentChildRecyclerView(): ChildRecyclerView? {
         return mCurrentRecyclerView
+    }
+
+    fun destroy() {
+        cacheVies.clear()
     }
 }

@@ -6,15 +6,15 @@ import android.support.v7.widget.StaggeredGridLayoutManager
 import android.util.AttributeSet
 import com.gaohui.nestedrecyclerview.adapter.MultiTypeAdapter
 
-class CategoryView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : ChildRecyclerView(context, attrs, defStyleAttr) {
+class CategoryView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : ChildRecyclerView(context, attrs, defStyleAttr),OnUserVisibleChange {
 
     private val mDataList = ArrayList<Any>()
+
+    private var hasLoadData = false
 
     init {
         initRecyclerView()
         initLoadMore()
-
-        initData()
     }
 
     private fun initRecyclerView() {
@@ -27,44 +27,49 @@ class CategoryView @JvmOverloads constructor(context: Context, attrs: AttributeS
         addOnScrollListener(object :OnScrollListener(){
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-
-                val needLoadMore = getLastVisibleItem(this@CategoryView) >=  getTotalItemCount(this@CategoryView) - 4
-                if(needLoadMore) {
-                    onLoadMore()
-                }
+                tryLoadMoreIfNeed()
             }
         })
 
     }
 
-    fun getLastVisibleItem(childRecyclerView:RecyclerView): Int {
-        val layoutManager = childRecyclerView.layoutManager
-        return if (layoutManager != null && layoutManager is StaggeredGridLayoutManager) {
-            val iArr = IntArray(2)
-            layoutManager.findLastVisibleItemPositions(iArr)
-            if (iArr[0] > iArr[1]) iArr[0] else iArr[1]
-        } else  {
-            -1
+    private fun tryLoadMoreIfNeed() {
+        if(adapter == null) return
+        val layoutManager = layoutManager
+        val last: IntArray
+        if (layoutManager is StaggeredGridLayoutManager) {
+            last = IntArray(layoutManager.spanCount)
+            layoutManager.findLastVisibleItemPositions(last)
+            for (i in last.indices) {
+                if ((last[i] >= adapter!!.itemCount - 4)) {
+                    if (loadMore()) return
+                    break
+                }
+            }
         }
     }
 
-    fun getTotalItemCount(childRecyclerView:RecyclerView): Int {
-        return childRecyclerView.adapter?.itemCount?:-1
-    }
-
     private fun initData() {
+        hasLoadData = true
         for (i in 0..10) {
             mDataList.add("default child item $i")
         }
         adapter?.notifyDataSetChanged()
     }
 
-    private fun onLoadMore() {
+    private fun loadMore():Boolean {
         val loadMoreSize = 5
         for (i in 0..loadMoreSize) {
             mDataList.add("load more child item $i")
         }
         adapter?.notifyItemRangeChanged(mDataList.size-loadMoreSize,mDataList.size)
+        return true
+    }
+
+    override fun onUserVisibleChange(isVisibleToUser: Boolean) {
+        if(hasLoadData.not() && isVisibleToUser) {
+            initData()
+        }
     }
 
 }
