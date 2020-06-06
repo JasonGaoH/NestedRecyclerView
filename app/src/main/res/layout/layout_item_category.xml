@@ -5,11 +5,26 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-        <android.support.design.widget.TabLayout
-                android:id="@+id/tabs"
-                app:tabMode="scrollable"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"/>
+<!--        <android.support.design.widget.TabLayout-->
+<!--                android:id="@+id/tabs"-->
+<!--                app:tabMode="scrollable"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="40dp"/>-->
+
+        <com.gaohui.nestedrecyclerview.tab.DynamicTabLayout
+            android:id="@+id/newTabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingTop="6dp"
+            android:paddingBottom="5dp"
+            app:dtl_tabIndicatorColor="#ff0000"
+            app:dtl_tabIndicatorHeight="2dp"
+            app:dtl_tabIndicatorWidth="25dp"
+            app:dtl_tabPaddingEnd="0dp"
+            app:dtl_tabPaddingStart="0dp"
+            app:dtl_tabSelectedTextColor="#333333"
+            app:dtl_tabTextColor="#666666" />
 
         <android.support.v4.view.ViewPager
                 android:id="@+id/viewPager"

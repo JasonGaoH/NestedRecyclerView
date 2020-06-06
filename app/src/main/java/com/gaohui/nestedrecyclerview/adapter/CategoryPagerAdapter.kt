@@ -4,13 +4,13 @@ import android.support.v4.view.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
 import com.gaohui.nestedrecyclerview.CategoryView
-import com.gaohui.nestedrecyclerview.ChildRecyclerView
-import com.gaohui.nestedrecyclerview.OnUserVisibleChange
+import com.gaohui.nestedrecyclerview.tab.DynamicTabBean
+import com.gaohui.nestedrecyclerview.tab.DynamicTabLayout
 
 class CategoryPagerAdapter(
     private val viewList: ArrayList<CategoryView>,
     private val tabTitleList: ArrayList<String>
-) : PagerAdapter() {
+) : PagerAdapter(),DynamicTabLayout.DynamicTabProvider {
 
     private var mCurrentPrimaryItem:CategoryView? = null
 
@@ -46,5 +46,9 @@ class CategoryPagerAdapter(
 
     override fun getPageTitle(position: Int): CharSequence? {
         return tabTitleList[position]
+    }
+
+    override fun getPageTitleItem(position: Int): DynamicTabBean? {
+        return DynamicTabBean("推荐", "精品推荐")
     }
 }

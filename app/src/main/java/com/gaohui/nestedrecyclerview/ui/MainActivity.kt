@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         swipeRefreshLayout.setOnRefreshListener {
             refresh()
         }
+
     }
 
     private fun refresh() {

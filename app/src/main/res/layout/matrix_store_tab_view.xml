@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:minHeight="34dp"
+    tools:layout_width="75dp">
+
+    <FrameLayout
+        android:id="@+id/titleContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:id="@+id/tabTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#333333"
+            android:textSize="16sp"
+            tools:text="推荐" />
+
+        <ImageView
+            android:id="@+id/tabImage"
+            android:layout_width="63dp"
+            android:layout_height="18dp"
+            android:paddingBottom="2dp"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tabDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/titleContainer"
+        android:layout_centerHorizontal="true"
+        android:paddingBottom="1dp"
+        android:paddingTop="1dp"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp"
+        android:layout_marginTop="2dp"
+        android:textSize="12sp"
+        tools:text="运营文案" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="0.5dp"
+        android:layout_height="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="#999999"
+        android:layout_alignParentRight="true" />
+
+</merge>

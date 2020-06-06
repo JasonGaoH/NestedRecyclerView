@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="DynamicTabLayout">
+        <attr name="dtl_indicatorPadding" format="dimension" />
+        <attr name="dtl_tabIndicatorColor" format="color" />
+        <attr name="dtl_tabIndicatorHeight" format="dimension" />
+        <attr name="dtl_tabIndicatorWidth" format="dimension" />
+        <attr name="dtl_tabIndicatorOffset" format="dimension" />
+        <attr name="dtl_tabIndicatorAnimation" format="boolean" />
+        <attr name="dtl_tabIndicatorRadiusX" format="float" />
+        <attr name="dtl_tabIndicatorRadiusY" format="float" />
+        <attr name="dtl_tabContentStart" format="dimension" />
+        <attr name="dtl_tabBackground" format="reference" />
+        <attr name="dtl_tabMode">
+            <enum name="scrollable" value="0" />
+            <enum name="fixed" value="1" />
+        </attr>
+        <attr name="dtl_tabGravity">
+            <enum name="fill" value="0" />
+            <enum name="center" value="1" />
+        </attr>
+        <attr name="dtl_tabMinWidth" format="dimension" />
+        <attr name="dtl_tabMaxWidth" format="dimension" />
+        <attr name="dtl_tabTextAppearance" format="reference" />
+        <attr name="dtl_tabTextColor" format="color" />
+        <attr name="dtl_tabSelectedTextColor" format="color" />
+        <attr name="dtl_tabPaddingStart" format="dimension" />
+        <attr name="dtl_tabPaddingTop" format="dimension" />
+        <attr name="dtl_tabPaddingEnd" format="dimension" />
+        <attr name="dtl_tabPaddingBottom" format="dimension" />
+        <attr name="dtl_tabPadding" format="dimension" />
+    </declare-styleable>
+
+</resources>
