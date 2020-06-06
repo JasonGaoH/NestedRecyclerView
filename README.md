@@ -19,6 +19,9 @@
   - fling效果与滑动类似
 - 具体实现可看项目代码
 
+### 新增Tab折叠动画
+![](https://raw.githubusercontent.com/JasonGaoH/NestedRecyclerView/master/gif/nested_recyclerview_animaion.gif)
+
 关于
 --
 
