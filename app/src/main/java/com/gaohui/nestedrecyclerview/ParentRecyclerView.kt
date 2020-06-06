@@ -96,11 +96,12 @@ class ParentRecyclerView @JvmOverloads constructor(context: Context, attrs: Attr
 
             override fun canScrollVertically(): Boolean {
                 val childRecyclerView = findNestedScrollingChildRecyclerView()
+                    ?: return canScrollVertically.get()
 
-                if(canScrollVertically.get() || childRecyclerView == null || childRecyclerView.isScrollTop()) {
-                    return true
+                if (!childRecyclerView.isScrollTop()) {//先让子RecyclerView滑动到顶部
+                    return false
                 }
-                return false
+                return (canScrollVertically.get() || childRecyclerView.isScrollTop())
 
             }
 
