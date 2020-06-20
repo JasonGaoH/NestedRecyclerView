@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.gaohui.nestedrecyclerview.StoreSwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.gaohui.nestedrecyclerview.kotlin.StoreSwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <com.gaohui.nestedrecyclerview.ParentRecyclerView
+    <com.gaohui.nestedrecyclerview.kotlin.ParentRecyclerView
             android:id="@+id/parentRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never" />
 
-</com.gaohui.nestedrecyclerview.StoreSwipeRefreshLayout>
+</com.gaohui.nestedrecyclerview.kotlin.StoreSwipeRefreshLayout>
