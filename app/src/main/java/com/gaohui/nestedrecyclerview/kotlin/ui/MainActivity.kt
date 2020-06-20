@@ -27,8 +27,8 @@ class MainActivity : BaseMenuActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        parentRecyclerView.initLayoutManager()
-        parentRecyclerView.adapter = multiTypeAdapter
+        kttRecyclerView.initLayoutManager()
+        kttRecyclerView.adapter = multiTypeAdapter
 
         refresh()
 
@@ -56,7 +56,7 @@ class MainActivity : BaseMenuActivity() {
         if (System.currentTimeMillis() - lastBackPressedTime < 2000) {
             super.onBackPressed()
         } else {
-            parentRecyclerView.scrollToPosition(0)
+            kttRecyclerView.scrollToPosition(0)
             Toast.makeText(this,"再按一次退出程序",Toast.LENGTH_SHORT).show()
             lastBackPressedTime = System.currentTimeMillis()
         }

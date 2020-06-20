@@ -23,7 +23,7 @@ public class MainJavaActivity extends BaseMenuActivity {
     MultiTypeAdapter adapter = new MultiTypeAdapter(mDataList);
 
     StoreSwipeRefreshLayout storeSwipeRefreshLayout;
-    ParentRecyclerView parentRecyclerView;
+    ParentRecyclerView javaRecyclerView;
 
     Long lastBackPressedTime = 0L;
 
@@ -34,12 +34,12 @@ public class MainJavaActivity extends BaseMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_java);
 
-        parentRecyclerView = findViewById(R.id.parentRecyclerView);
+        javaRecyclerView = findViewById(R.id.javaRecyclerView);
 
         storeSwipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
-        parentRecyclerView.setAdapter(adapter);
+        javaRecyclerView.setAdapter(adapter);
 
-        parentRecyclerView.initLayoutManager(this);
+        javaRecyclerView.initLayoutManager(this);
 
         refresh();
 
@@ -58,7 +58,7 @@ public class MainJavaActivity extends BaseMenuActivity {
         if(System.currentTimeMillis() - lastBackPressedTime < 2000) {
             super.onBackPressed();
         } else  {
-            parentRecyclerView.scrollToPosition(0);
+            javaRecyclerView.scrollToPosition(0);
             Toast.makeText(this,"再按一次退出程序",Toast.LENGTH_SHORT).show();
             lastBackPressedTime = System.currentTimeMillis();
         }

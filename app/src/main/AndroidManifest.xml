@@ -10,8 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".java.MainJavaActivity"></activity>
-        <activity android:name=".kotlin.ui.MainActivity">
+        <activity android:name=".kotlin.ui.MainActivity"></activity>
+        <activity android:name=".java.MainJavaActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

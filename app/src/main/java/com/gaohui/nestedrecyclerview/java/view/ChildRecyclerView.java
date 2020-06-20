@@ -97,7 +97,7 @@ public class ChildRecyclerView extends RecyclerView {
             isStartFling = true;
             mVelocity = velocityY;
         }
-        return super.fling(velocityX, velocityY);
+        return fling;
     }
 
     boolean isScrollTop() {

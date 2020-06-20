@@ -41,6 +41,11 @@ public class CategoryPagerAdapter extends PagerAdapter {
     }
 
     @Override
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+//        super.destroyItem(container, position, object);
+    }
+
+    @Override
     public void setPrimaryItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         CategoryView categoryView = (CategoryView) object;
         if(categoryView  != mCurrentPrimaryItem) {

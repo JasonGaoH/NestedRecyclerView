@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <com.gaohui.nestedrecyclerview.java.view.ParentRecyclerView
-        android:id="@+id/parentRecyclerView"
+        android:id="@+id/javaRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never" />
