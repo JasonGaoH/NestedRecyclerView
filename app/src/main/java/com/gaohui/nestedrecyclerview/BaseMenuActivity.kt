@@ -19,12 +19,12 @@ import com.gaohui.nestedrecyclerview.kotlin.ui.MainActivity
 open class BaseMenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        fullscreen()
+//        fullscreen()
     }
 
     override fun onResume() {
         super.onResume()
-        fullscreen()
+//        fullscreen()
     }
 
     private fun fullscreen() {

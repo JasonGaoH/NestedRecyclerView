@@ -222,7 +222,7 @@ public class ParentRecyclerView extends RecyclerView {
 
     @Override
     public boolean onStartNestedScroll(View child, View target, int nestedScrollAxes) {
-        return (target != null) && (child instanceof  ChildRecyclerView);
+        return (target != null) && (target instanceof  ChildRecyclerView);
     }
 
     @Override
