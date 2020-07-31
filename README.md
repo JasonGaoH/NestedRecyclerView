@@ -83,6 +83,7 @@ private ParentRecyclerView findParentRecyclerView() {
 
 ### 另外 
 > 新增Tab折叠动画
+
 ![](https://raw.githubusercontent.com/JasonGaoH/NestedRecyclerView/master/gif/nested_recyclerview_animaion.gif)
 
 关于
