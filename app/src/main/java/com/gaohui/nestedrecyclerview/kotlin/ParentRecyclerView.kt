@@ -128,8 +128,8 @@ class ParentRecyclerView @JvmOverloads constructor(context: Context, attrs: Attr
             velocityY = 0
             stopScroll()
         }
-        if((ev == null || ev.action == MotionEvent.ACTION_MOVE).not()) {
-            //在ACTION_MOVE的情况下，将lastY置为0
+        if((ev == null || ev.action == MotionEvent.ACTION_DOWN).not()) {
+            //在非ACTION_DOWN的情况下，将lastY置为0
             lastY = 0f
             canScrollVertically.set(isScrollEnd().not())
         }

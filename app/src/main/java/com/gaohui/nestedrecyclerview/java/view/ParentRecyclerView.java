@@ -125,7 +125,7 @@ public class ParentRecyclerView extends RecyclerView {
             stopScroll();
         }
         if(!(ev == null || ev.getAction() == MotionEvent.ACTION_DOWN)) {
-            //在ACTION_MOVE的情况下，将lastY置为0
+            //在非ACTION_DOWN的情况下，将lastY置为0
             lastY = 0f;
             canScrollVertically.set(!isScrollEnd());
         }
