@@ -88,13 +88,7 @@ public class ParentRecyclerView extends RecyclerView {
             @Override
             public boolean canScrollVertically() {
                 ChildRecyclerView childRecyclerView = findNestedScrollingChildRecyclerView();
-                if(childRecyclerView == null) {
-                    return canScrollVertically.get();
-                }
-                if(!childRecyclerView.isScrollTop()) {
-                    return  false;
-                }
-                return (canScrollVertically.get() || childRecyclerView.isScrollTop());
+                return (canScrollVertically.get()  || childRecyclerView == null || childRecyclerView.isScrollTop());
             }
 
             @Override
@@ -124,10 +118,9 @@ public class ParentRecyclerView extends RecyclerView {
             velocityY = 0;
             stopScroll();
         }
-        if(!(ev == null || ev.getAction() == MotionEvent.ACTION_DOWN)) {
-            //在非ACTION_DOWN的情况下，将lastY置为0
+        if(!(ev == null || ev.getAction() == MotionEvent.ACTION_MOVE)) {
+            //在非ACTION_MOVE的情况下，将lastY置为0
             lastY = 0f;
-            canScrollVertically.set(!isScrollEnd());
         }
          try {
             return super.dispatchTouchEvent(ev);

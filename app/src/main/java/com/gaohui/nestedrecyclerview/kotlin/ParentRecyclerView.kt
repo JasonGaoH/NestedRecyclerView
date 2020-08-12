@@ -96,12 +96,7 @@ class ParentRecyclerView @JvmOverloads constructor(context: Context, attrs: Attr
 
             override fun canScrollVertically(): Boolean {
                 val childRecyclerView = findNestedScrollingChildRecyclerView()
-                    ?: return canScrollVertically.get()
-
-                if (!childRecyclerView.isScrollTop()) {//先让子RecyclerView滑动到顶部
-                    return false
-                }
-                return (canScrollVertically.get() || childRecyclerView.isScrollTop())
+                return canScrollVertically.get() || childRecyclerView == null || childRecyclerView.isScrollTop()
 
             }
 
@@ -128,10 +123,9 @@ class ParentRecyclerView @JvmOverloads constructor(context: Context, attrs: Attr
             velocityY = 0
             stopScroll()
         }
-        if((ev == null || ev.action == MotionEvent.ACTION_DOWN).not()) {
-            //在非ACTION_DOWN的情况下，将lastY置为0
+        if((ev == null || ev.action == MotionEvent.ACTION_MOVE).not()) {
+            //在非ACTION_MOVE的情况下，将lastY置为0
             lastY = 0f
-            canScrollVertically.set(isScrollEnd().not())
         }
         return try {
             super.dispatchTouchEvent(ev)
