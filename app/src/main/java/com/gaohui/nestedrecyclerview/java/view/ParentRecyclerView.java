@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 
 import com.gaohui.nestedrecyclerview.UIUtils;
 import com.gaohui.nestedrecyclerview.java.adapter.MultiTypeAdapter;
@@ -34,6 +35,10 @@ public class ParentRecyclerView extends RecyclerView {
     boolean isStartFling = false;
 
     AtomicBoolean canScrollVertically;
+    private int mLastXInterceptX;
+    private int mLastYInterceptY;
+
+    private int mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
 
     private void init(Context context) {
         mFlingHelper = new FlingHelper(context);
@@ -110,6 +115,53 @@ public class ParentRecyclerView extends RecyclerView {
         setLayoutManager(layoutManager);
     }
 
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        boolean res = false;
+        if(!isChildConsumeTouch(event)) {
+            res = super.onInterceptHoverEvent(event);
+        }
+        return res;
+    }
+
+
+
+    private boolean isChildConsumeTouch(MotionEvent event) {
+        int x = (int) event.getX();
+        int y = (int) event.getY();
+        if(event.getAction() !=  MotionEvent.ACTION_MOVE) {
+            mLastXInterceptX = x;
+            mLastYInterceptY = y;
+            return false;
+        }
+        int deltaX = x - mLastXInterceptX;
+        int deltaY = y - mLastYInterceptY;
+        if(Math.abs(deltaX) <= Math.abs(deltaY) || Math.abs(deltaY) <= mTouchSlop) {
+            return false;
+        }
+        return shouldChildScroll(deltaY);
+    }
+
+    private boolean shouldChildScroll(int deltaY) {
+        ChildRecyclerView childRecyclerView = findNestedScrollingChildRecyclerView();
+        if(childRecyclerView == null) {
+            return false;
+        }
+        if(isScrollToBottom()) {
+            if(deltaY > 0) {
+                return false;
+            } else if(deltaY < 0 && !childRecyclerView.isScrollTop()) {
+                return true;
+            }
+        } else {
+            if(deltaY > 0 && !childRecyclerView.isScrollTop()) {
+                return true;
+            } else if(deltaY < 0) {
+                return false;
+            }
+        }
+        return false;
+    }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -122,7 +174,7 @@ public class ParentRecyclerView extends RecyclerView {
             //在非ACTION_MOVE的情况下，将lastY置为0
             lastY = 0f;
         }
-         try {
+        try {
             return super.dispatchTouchEvent(ev);
         } catch (Exception e) {
             e.printStackTrace();
@@ -135,7 +187,7 @@ public class ParentRecyclerView extends RecyclerView {
         if(lastY == 0f) {
             lastY = e.getY();
         }
-        if(isScrollEnd()) {
+        if(isScrollToBottom()) {
             //如果父RecyclerView已经滑动到底部，需要让子RecyclerView滑动剩余的距离
             ChildRecyclerView childRecyclerView = findNestedScrollingChildRecyclerView();
             if(childRecyclerView != null) {
@@ -170,7 +222,7 @@ public class ParentRecyclerView extends RecyclerView {
     }
 
     private void dispatchChildFling() {
-        if(isScrollEnd() && velocityY != 0) {
+        if(isScrollToBottom() && velocityY != 0) {
             double splineFlingDistance = mFlingHelper.getSplineFlingDistance(velocityY);
             if(splineFlingDistance > mTotalDy) {
                 childFling(mFlingHelper.getVelocityByDistance(splineFlingDistance - mTotalDy));
@@ -194,7 +246,7 @@ public class ParentRecyclerView extends RecyclerView {
         return  null;
     }
 
-    private boolean isScrollEnd() {
+    private boolean isScrollToBottom() {
         //RecyclerView.canScrollVertically(1)的值表示是否能向上滚动，false表示已经滚动到底部
         return !canScrollVertically(1);
     }
@@ -222,11 +274,11 @@ public class ParentRecyclerView extends RecyclerView {
     public void onNestedPreScroll(View target, int dx, int dy, int[] consumed) {
         ChildRecyclerView childRecyclerView = findNestedScrollingChildRecyclerView();
         //1.当前Parent RecyclerView没有滑动底，且dy> 0 是下滑
-        boolean isParentCanScroll = dy > 0 && !isScrollEnd();
+        boolean isParentCanScroll = dy > 0 && !isScrollToBottom();
         //2.当前Child RecyclerView滑到顶部了，且dy < 0,即上滑
         boolean isChildCanNotScroll = !(dy >= 0
-                                || childRecyclerView == null
-                                || !childRecyclerView.isScrollTop());
+                || childRecyclerView == null
+                || !childRecyclerView.isScrollTop());
         //以上两种情况都需要让Parent RecyclerView去scroll，和下面onNestedPreFling机制类似
         if(isParentCanScroll || isChildCanNotScroll) {
             scrollBy(0,dy);
@@ -242,7 +294,7 @@ public class ParentRecyclerView extends RecyclerView {
     @Override
     public boolean onNestedPreFling(View target, float velocityX, float velocityY) {
         ChildRecyclerView childRecyclerView = findNestedScrollingChildRecyclerView();
-        boolean isParentCanFling = velocityY > 0f && !isScrollEnd();
+        boolean isParentCanFling = velocityY > 0f && !isScrollToBottom();
         boolean isChildCanNotFling = !(velocityY >= 0
                 || childRecyclerView == null
                 || !childRecyclerView.isScrollTop());

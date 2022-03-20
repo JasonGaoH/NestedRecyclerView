@@ -106,11 +106,15 @@ public class ChildRecyclerView extends RecyclerView {
 
     }
 
+    private ParentRecyclerView parentRecyclerView;
     private ParentRecyclerView findParentRecyclerView() {
-        ViewParent parentView = getParent();
-        while (!(parentView instanceof ParentRecyclerView)) {
-            parentView = parentView.getParent();
+        if(parentRecyclerView == null) {
+            ViewParent parentView = getParent();
+            while (!(parentView instanceof ParentRecyclerView)) {
+                parentView = parentView.getParent();
+            }
+            parentRecyclerView = (ParentRecyclerView) parentView;
         }
-        return (ParentRecyclerView)parentView;
+        return parentRecyclerView;
     }
 }
