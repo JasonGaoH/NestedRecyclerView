@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="68dp"
+    android:layout_height="68dp"
+    android:layout_marginRight="6dp"
+    tools:ignore="RtlHardcoded">
+
+    <ImageView
+        android:id="@+id/tab_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="21dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="13dp"
+        android:maxWidth="68dp"
+         />
+
+    <TextView
+        android:id="@+id/tab_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:gravity="center"
+        android:maxLines="2"
+        android:paddingStart="3dp"
+        android:paddingEnd="3dp"
+        android:textColor="#99858B9C"
+        android:textSize="11dp"
+        tools:text="Free Shipping" />
+
+</FrameLayout>

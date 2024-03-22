@@ -14,6 +14,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.gaohui.nestedrecyclerview.java.MainJavaActivity
+import com.gaohui.nestedrecyclerview.update.MainUpdateActivity
 import com.gaohui.nestedrecyclerview.kotlin.ui.MainActivity
 
 open class BaseMenuActivity : AppCompatActivity() {
@@ -45,6 +46,8 @@ open class BaseMenuActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.java -> startActivity(Intent(this, MainJavaActivity::class.java))
             R.id.kotlin -> startActivity(Intent(this, MainActivity::class.java))
+            R.id.update -> startActivity(Intent(this,
+                MainUpdateActivity::class.java))
         }
         finish()
         return true

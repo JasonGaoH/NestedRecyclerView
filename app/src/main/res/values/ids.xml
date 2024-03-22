@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="jfy_child_recycler_view_of_nest_recycler_view" type="id" />
+    <item name="id_guess_view_pager" type="id"/>
+
+</resources>
